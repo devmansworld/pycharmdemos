@@ -15,11 +15,14 @@ class TimeCalculator(cmd.Cmd):
         return True
 
     def validate_time_format(self, time_input):
-        return re.match(r'^\d{1,2}\.\d{2}$', time_input)
+        # Allow both '.' and ',' as decimal separators
+        return re.match(r'^\d{1,2}([.,]\d{2})?$', time_input)
 
     def do_time(self, time_input):
         """Add time in hh.mm format"""
         if self.validate_time_format(time_input):
+            # Replace comma (,) with a dot (.) for parsing
+            time_input = time_input.replace(',', '.')
             hours, minutes = map(float, time_input.split('.'))
             self.total_hours += hours
             self.total_minutes += minutes
